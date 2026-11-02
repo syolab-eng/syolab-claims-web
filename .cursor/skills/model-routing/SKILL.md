@@ -17,4 +17,6 @@ Guide: https://github.com/cursor/plugins/blob/main/pstack/docs/guide/README.md
 5. Append one JSONL line to `runs/log.jsonl` when each role finishes. Include ticket, retries, failures, reviewer flags, escalations, and the model used. Schema: `runs/README.md`.
 6. After the run, reflection (`.cursor/agents/reflection.md`) fixes the guardrail, not the pull request. The lesson lands as a rule, a hook, or a CI check in a separate pull request a human reviews. Do not merge it. Model: `grok-4.7[effort=high]`.
 
+The reviewer stays readonly and does not edit. It must run the test commands and record their output. A blocked shell, or a review with no command output, is a failed review, not a pass.
+
 The stop hook writes `kind` `tests`. Reviewer notes name the evidence (command and result), not a diff summary.

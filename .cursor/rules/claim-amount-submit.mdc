@@ -1,0 +1,8 @@
+---
+description: Claim create body sends a canonical decimal; the stub parser stays strict
+alwaysApply: true
+---
+
+A unit test must assert that the claim create body `amount` is the canonical decimal when the typed value has a thousands comma or a leading dollar sign. A test that only checks form validation is not enough.
+
+Keep form entry (`parseAmount`) separate from stored amounts (`parseStoredAmount`). The stub create-claim parser stays on that strict decimal grammar and rejects a dollar sign and grouping commas. Do not widen it to accept decorated amounts.
