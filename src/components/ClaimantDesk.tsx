@@ -3,6 +3,7 @@ import { createClaim, listClaims, listPolicies } from "../api/client";
 import type { Claim, Policy } from "../api/types";
 import { newestFirst } from "../domain/claims";
 import {
+  claimCreateBody,
   firstInvalidField,
   hasFieldErrors,
   validateClaimForm,
@@ -117,7 +118,8 @@ export function ClaimantDesk() {
     const nextErrors = validateClaimForm(form);
     setErrors(nextErrors);
     setSubmitError(null);
-    if (hasFieldErrors(nextErrors)) {
+    const body = claimCreateBody(form, documents);
+    if (body === null || hasFieldErrors(nextErrors)) {
       const field = firstInvalidField(nextErrors);
       if (field) {
         document.getElementById(field)?.focus();
@@ -127,14 +129,7 @@ export function ClaimantDesk() {
 
     setSubmitting(true);
     try {
-      await createClaim({
-        policyNumber: form.policyNumber.trim(),
-        claimantName: form.claimantName.trim(),
-        amount: form.amount.trim(),
-        incidentDate: form.incidentDate,
-        description: form.description.trim(),
-        documentNames: documents,
-      });
+      await createClaim(body);
       await refreshClaims();
       setForm((current) => ({
         ...EMPTY_FORM,

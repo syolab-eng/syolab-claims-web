@@ -1,3 +1,4 @@
+import type { CreateClaimRequest } from "../api/types";
 import { isIsoDate } from "./dates";
 import { parseAmount } from "./money";
 
@@ -52,4 +53,26 @@ export function firstInvalidField(errors: FieldErrors): FieldName | null {
 
 export function hasFieldErrors(errors: FieldErrors): boolean {
   return firstInvalidField(errors) !== null;
+}
+
+export function claimCreateBody(
+  values: ClaimFormValues,
+  documentNames: readonly string[],
+): CreateClaimRequest | null {
+  const fieldErrors = validateClaimForm(values);
+  if (hasFieldErrors(fieldErrors)) {
+    return null;
+  }
+  const parsed = parseAmount(values.amount);
+  if (!parsed.ok) {
+    return null;
+  }
+  return {
+    policyNumber: values.policyNumber.trim(),
+    claimantName: values.claimantName.trim(),
+    amount: parsed.text,
+    incidentDate: values.incidentDate,
+    description: values.description.trim(),
+    documentNames: [...documentNames],
+  };
 }

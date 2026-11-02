@@ -1,7 +1,7 @@
 import type { DecisionChoice } from "../src/api/types";
 import { isIsoDate } from "../src/domain/dates";
 import { DECISION_ACTIONS, noteRequired } from "../src/domain/decision";
-import { parseAmount } from "../src/domain/money";
+import { parseStoredAmount } from "../src/domain/money";
 import type { DecisionInput } from "./decision";
 import type { NewClaim } from "./evaluate";
 
@@ -39,7 +39,7 @@ export function parseCreateClaim(body: unknown): ParseResult {
   if (typeof record.amount !== "string") {
     return { ok: false, message: "Amount must be a decimal string." };
   }
-  if (!parseAmount(record.amount).ok) {
+  if (!parseStoredAmount(record.amount).ok) {
     return {
       ok: false,
       message: "Amount must be greater than zero with at most two decimal places.",
