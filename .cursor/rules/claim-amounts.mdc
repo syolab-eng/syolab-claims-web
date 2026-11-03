@@ -1,0 +1,12 @@
+---
+description: How claim amounts are stored and shown
+alwaysApply: true
+---
+
+Screens that show a claim amount (the claims list and the claim detail Amount field) show en-US dollars: a dollar sign, thousands separators, and two decimal places. Example: stored 1250.00 is shown as $1,250.00.
+
+Call `formatClaimAmount` for that display. Do not render `claim.amount` directly.
+
+`parseAmount` stays a canonical plain decimal (`dollars.mm`). Do not put `$` or grouping into its text. Coverage checks and API payloads keep the stored decimal.
+
+Do not format a claim amount by dividing integer cents by 100. That drops a cent on large amounts. Format the canonical decimal text: group the whole dollars, then append the two cent digits.
