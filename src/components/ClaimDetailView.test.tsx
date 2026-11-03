@@ -108,6 +108,7 @@ describe("ClaimDetailView", () => {
       expect(html).toMatch(new RegExp(`<h3[^>]*>${heading}</h3>`));
     }
     expect(html).toContain("POL-1002");
+    expect(html).toContain("$1,200.00");
     expect(html).toContain("MISSING_DOCUMENTS");
     expect(html).toContain("A required document is missing.");
     expect(html).toContain("Pending → Info requested");
