@@ -1,0 +1,8 @@
+---
+description: Format claim amounts before they reach the UI
+alwaysApply: true
+---
+
+Claim amounts shown in the UI go through `formatStoredAmount`. Do not render `claim.amount` directly. A test that covers a new amount display must assert the formatted currency string (dollar sign and grouping), not the stored decimal.
+
+Customer-safe copy only. No other vendors.
