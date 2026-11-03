@@ -12,6 +12,7 @@ import {
 import { roleLabel } from "../domain/roles";
 import { statusLabel } from "../domain/status";
 import { DecisionBadge } from "./DecisionBadge";
+import { formatClaimAmount } from "./formatClaimAmount";
 import { RouteLink } from "./RouteLink";
 
 export const CLAIM_DETAIL_ID = "claim-detail";
@@ -84,7 +85,7 @@ export function ClaimDetailView({
           <dt>Claimant</dt>
           <dd>{claim.claimantName}</dd>
           <dt>Amount</dt>
-          <dd>{claim.amount}</dd>
+          <dd>{formatClaimAmount(claim.amount)}</dd>
           <dt>Incident date</dt>
           <dd>{claim.incidentDate}</dd>
           <dt>Description</dt>
