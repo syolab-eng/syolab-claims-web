@@ -28,3 +28,23 @@ export function centsOfStoredAmount(amount: string): number {
   }
   return parsed.cents;
 }
+
+function groupWholeDollars(digits: string): string {
+  const groups: string[] = [];
+  let end = digits.length;
+  while (end > 0) {
+    const start = Math.max(0, end - 3);
+    groups.unshift(digits.slice(start, end));
+    end = start;
+  }
+  return groups.join(",");
+}
+
+export function formatStoredAmount(amount: string): string {
+  const parsed = parseAmount(amount);
+  if (!parsed.ok) {
+    return amount;
+  }
+  const [whole = "", fraction = ""] = parsed.text.split(".");
+  return `$${groupWholeDollars(whole)}.${fraction}`;
+}

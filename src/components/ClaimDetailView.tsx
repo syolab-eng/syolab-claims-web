@@ -9,6 +9,7 @@ import {
   isFinal,
   latestDecisionNote,
 } from "../domain/decision";
+import { formatStoredAmount } from "../domain/money";
 import { roleLabel } from "../domain/roles";
 import { statusLabel } from "../domain/status";
 import { DecisionBadge } from "./DecisionBadge";
@@ -84,7 +85,7 @@ export function ClaimDetailView({
           <dt>Claimant</dt>
           <dd>{claim.claimantName}</dd>
           <dt>Amount</dt>
-          <dd>{claim.amount}</dd>
+          <dd>{formatStoredAmount(claim.amount)}</dd>
           <dt>Incident date</dt>
           <dd>{claim.incidentDate}</dd>
           <dt>Description</dt>
