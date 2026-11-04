@@ -1,0 +1,8 @@
+---
+description: Claim amounts shown in the UI use formatUsd
+alwaysApply: true
+---
+
+Claim amounts shown in the UI go through `formatUsd`. `{claim.amount}` in JSX is rejected by `npm run check:money`.
+
+Customer-safe copy only. Fictional Syolab policyholders. No other vendors.

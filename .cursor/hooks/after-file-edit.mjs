@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { dirname, extname, resolve } from "node:path";
+import { dirname, extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -22,6 +22,26 @@ function run(command, args) {
   });
 }
 
+function isTsxUnderSrc(filePath) {
+  if (extname(filePath).toLowerCase() !== ".tsx") return false;
+  const abs = resolve(root, filePath);
+  const rel = relative(resolve(root, "src"), abs);
+  return rel !== "" && !rel.startsWith("..") && !rel.split(sep).includes("..");
+}
+
+function runMoneyCheck() {
+  const script = resolve(root, "scripts/check-claim-amount-display.mjs");
+  const result = spawnSync(process.execPath, [script], {
+    cwd: root,
+    stdio: "inherit",
+    timeout: 90_000,
+  });
+  if (result.status !== 0) {
+    if (result.error) console.error(`check:money: ${result.error.message}`);
+    process.exit(result.status ?? 1);
+  }
+}
+
 const raw = await readStdin();
 let filePath = "";
 try {
@@ -38,7 +58,8 @@ if (!filePath || !existsSync(filePath)) {
 }
 
 const bin = (name) => resolve(root, "node_modules", ".bin", name);
-if (!existsSync(resolve(root, "node_modules"))) {
+const hasNodeModules = existsSync(resolve(root, "node_modules"));
+if (!hasNodeModules && !isTsxUnderSrc(filePath)) {
   process.exit(0);
 }
 
@@ -57,16 +78,28 @@ const formattable = new Set([
   ".html",
 ]);
 
-if (formattable.has(extension) && existsSync(bin("prettier"))) {
+if (hasNodeModules && formattable.has(extension) && existsSync(bin("prettier"))) {
   run(bin("prettier"), ["--write", "--ignore-unknown", filePath]);
 }
 
-if ((extension === ".ts" || extension === ".tsx") && existsSync(bin("eslint"))) {
+if (
+  hasNodeModules &&
+  (extension === ".ts" || extension === ".tsx") &&
+  existsSync(bin("eslint"))
+) {
   run(bin("eslint"), ["--fix", "--no-error-on-unmatched-pattern", filePath]);
 }
 
-if ((extension === ".ts" || extension === ".tsx") && existsSync(bin("tsc"))) {
+if (
+  hasNodeModules &&
+  (extension === ".ts" || extension === ".tsx") &&
+  existsSync(bin("tsc"))
+) {
   run(bin("tsc"), ["--noEmit", "--pretty", "false", "--incremental"]);
+}
+
+if (isTsxUnderSrc(filePath)) {
+  runMoneyCheck();
 }
 
 process.exit(0);

@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "generate:api": "openapi-typescript openapi/claims-api.yaml -o src/api/schema.d.ts",
     "check:api": "npm run generate:api && git diff --exit-code -- src/api/schema.d.ts",
+    "check:money": "node scripts/check-claim-amount-display.mjs",
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",

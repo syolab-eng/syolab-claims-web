@@ -22,6 +22,9 @@ jobs:
       - name: Check generated API types
         run: npm run check:api
 
+      - name: Check claim amount display
+        run: npm run check:money
+
       - name: Unit tests
         run: npm test
 
