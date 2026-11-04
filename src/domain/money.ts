@@ -28,3 +28,16 @@ export function centsOfStoredAmount(amount: string): number {
   }
   return parsed.cents;
 }
+
+const STORED_DISPLAY_PATTERN = /^(\d+)\.(\d{2})$/;
+
+export function formatUsd(amount: string): string {
+  const match = amount.match(STORED_DISPLAY_PATTERN);
+  if (!match) {
+    return amount;
+  }
+  const whole = match[1] ?? "";
+  const fraction = match[2] ?? "";
+  const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `$${grouped}.${fraction}`;
+}

@@ -1,4 +1,5 @@
 import type { Claim } from "../api/types";
+import { formatUsd } from "../domain/money";
 import { statusLabel } from "../domain/status";
 import { DecisionBadge } from "./DecisionBadge";
 import { RouteLink } from "./RouteLink";
@@ -36,7 +37,7 @@ export function ClaimsList({ claims }: ClaimsListProps) {
                 </div>
               </div>
               <p className="meta">
-                {claim.policyNumber} · {claim.amount} · {claim.incidentDate}
+                {claim.policyNumber} · {formatUsd(claim.amount)} · {claim.incidentDate}
               </p>
               <p className="description">{claim.description}</p>
               <p className="findings">
