@@ -3,6 +3,7 @@ import type { Claim, Comment, DecisionChoice, Role } from "../api/types";
 import { shortId } from "../domain/claims";
 import { MAX_COMMENT_LENGTH } from "../domain/comments";
 import { formatDateTime } from "../domain/dates";
+import { formatStoredAmount } from "../domain/money";
 import {
   DECISION_ACTIONS,
   historyActionText,
@@ -84,7 +85,7 @@ export function ClaimDetailView({
           <dt>Claimant</dt>
           <dd>{claim.claimantName}</dd>
           <dt>Amount</dt>
-          <dd>{claim.amount}</dd>
+          <dd>{formatStoredAmount(claim.amount)}</dd>
           <dt>Incident date</dt>
           <dd>{claim.incidentDate}</dd>
           <dt>Description</dt>

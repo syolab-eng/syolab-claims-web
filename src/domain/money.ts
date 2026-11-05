@@ -28,3 +28,28 @@ export function centsOfStoredAmount(amount: string): number {
   }
   return parsed.cents;
 }
+
+function groupInteger(n: number): string {
+  const s = String(n);
+  const len = s.length;
+  const firstGroupLen = len % 3 || 3;
+  const parts: string[] = [s.slice(0, firstGroupLen)];
+  for (let i = firstGroupLen; i < len; i += 3) {
+    parts.push(s.slice(i, i + 3));
+  }
+  return parts.join(",");
+}
+
+function formatCentsAsUsd(cents: number): string {
+  const dollars = Math.trunc(cents / 100);
+  const remainder = cents % 100;
+  return `$${groupInteger(dollars)}.${String(remainder).padStart(2, "0")}`;
+}
+
+export function formatStoredAmount(stored: string): string {
+  const parsed = parseAmount(stored);
+  if (!parsed.ok) {
+    return stored;
+  }
+  return formatCentsAsUsd(parsed.cents);
+}
